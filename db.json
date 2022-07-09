@@ -16,7 +16,7 @@
       "id": 3,
       "text": "text 3",
       "day": "2022-03-03",
-      "reminder": false
+      "reminder": true
     }
   ]
 }
