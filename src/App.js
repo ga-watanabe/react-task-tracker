@@ -1,32 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
 
 function App() {
   const [showAddTask, setShowAddTask] = useState(false)
-  const [tasks, setTasks] = useState(
-    [
-      {
-        id: 1,
-        text: 'text 1',
-        day: '2022-01-01',
-        reminder: false
-      },
-      {
-        id: 2,
-        text: 'text 2',
-        day: '2022-02-02',
-        reminder: true
-      },
-      {
-        id: 3,
-        text: 'text 3',
-        day: '2022-03-03',
-        reminder: false
-      }
-    ]
-  )
+  const [tasks, setTasks] = useState([])
+
+  useEffect(() => {
+    const getTasks = async () => {
+      const tasksFromServer = await fetchTasks()
+      setTasks(tasksFromServer)
+    }
+
+    getTasks()
+  }, [])
+
+  const fetchTasks = async () => {
+    const res = await fetch('http://localhost:5000/tasks')
+    const data = await res.json()
+
+    return data
+  }
 
   const addTask = (task) => {
     const id = Math.floor(Math.random() *10000) + 1
@@ -51,6 +46,7 @@ function App() {
         title="Task Tracker"
         onAdd={() => setShowAddTask(!showAddTask)}
         showAddTask={showAddTask} />
+
       {showAddTask && <AddTask onAdd={addTask} />}
       {tasks.length > 0 ?
         <Tasks
@@ -63,4 +59,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
